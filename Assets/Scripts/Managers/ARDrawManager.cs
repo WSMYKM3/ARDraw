@@ -3,6 +3,7 @@ using DilmerGames.Core.Singletons;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.XR.ARFoundation;
+using UnityEngine.XR.ARSubsystems;
 
 [RequireComponent(typeof(ARAnchorManager))]
 public class ARDrawManager : Singleton<ARDrawManager>
@@ -22,6 +23,10 @@ public class ARDrawManager : Singleton<ARDrawManager>
     private List<ARAnchor> anchors = new List<ARAnchor>();
 
     private Dictionary<int, ARLine> Lines = new Dictionary<int, ARLine>();
+
+    private readonly Dictionary<int, List<Vector3>> pendingPointsWhileAnchoring = new Dictionary<int, List<Vector3>>();
+
+    private readonly HashSet<int> activeTouchFingers = new HashSet<int>();
 
     private bool CanDraw { get; set; }
 
@@ -56,28 +61,57 @@ public class ARDrawManager : Singleton<ARDrawManager>
             if(touch.phase == TouchPhase.Began)
             {
                 OnDraw?.Invoke();
-                
-                ARAnchor anchor = anchorManager.AddAnchor(new Pose(touchPosition, Quaternion.identity));
-                if (anchor == null) 
-                    Debug.LogError("Error creating reference point");
-                else 
-                {
-                    anchors.Add(anchor);
-                    ARDebugManager.Instance.LogInfo($"Anchor created & total of {anchors.Count} anchor(s)");
-                }
 
-                ARLine line = new ARLine(lineSettings);
-                Lines.Add(touch.fingerId, line);
-                line.AddNewLineRenderer(transform, anchor, touchPosition);
+                activeTouchFingers.Add(touch.fingerId);
+                pendingPointsWhileAnchoring[touch.fingerId] = new List<Vector3> { touchPosition };
+                _ = TryStartLineWithAnchorAsync(touch.fingerId, touchPosition);
             }
             else if(touch.phase == TouchPhase.Moved || touch.phase == TouchPhase.Stationary)
             {
-                Lines[touch.fingerId].AddPoint(touchPosition);
+                if (Lines.TryGetValue(touch.fingerId, out ARLine line))
+                    line.SampleStrokeInput(touchPosition, Time.time);
+                else if (pendingPointsWhileAnchoring.TryGetValue(touch.fingerId, out List<Vector3> buffer))
+                    buffer.Add(touchPosition);
             }
             else if(touch.phase == TouchPhase.Ended)
             {
+                activeTouchFingers.Remove(touch.fingerId);
+                pendingPointsWhileAnchoring.Remove(touch.fingerId);
                 Lines.Remove(touch.fingerId);
             }
+        }
+    }
+
+    async Awaitable TryStartLineWithAnchorAsync(int fingerId, Vector3 touchPosition)
+    {
+        var result = await anchorManager.TryAddAnchorAsync(new Pose(touchPosition, Quaternion.identity));
+        if (!result.status.IsSuccess())
+        {
+            Debug.LogError("Error creating reference point");
+            pendingPointsWhileAnchoring.Remove(fingerId);
+            activeTouchFingers.Remove(fingerId);
+            return;
+        }
+
+        if (!activeTouchFingers.Contains(fingerId))
+        {
+            pendingPointsWhileAnchoring.Remove(fingerId);
+            return;
+        }
+
+        ARAnchor anchor = result.value;
+        anchors.Add(anchor);
+        ARDebugManager.Instance.LogInfo($"Anchor created & total of {anchors.Count} anchor(s)");
+
+        ARLine line = new ARLine(lineSettings);
+        Lines.Add(fingerId, line);
+        line.AddNewLineRenderer(transform, anchor, touchPosition);
+
+        if (pendingPointsWhileAnchoring.TryGetValue(fingerId, out List<Vector3> buffered))
+        {
+            foreach (Vector3 p in buffered)
+                line.SampleStrokeInput(p, Time.time);
+            pendingPointsWhileAnchoring.Remove(fingerId);
         }
     }
 
@@ -91,16 +125,14 @@ public class ARDrawManager : Singleton<ARDrawManager>
         {
             OnDraw?.Invoke();
 
-            if(Lines.Keys.Count == 0)
+            if(!Lines.ContainsKey(0))
             {
                 ARLine line = new ARLine(lineSettings);
                 Lines.Add(0, line);
                 line.AddNewLineRenderer(transform, null, mousePosition);
             }
-            else 
-            {
-                Lines[0].AddPoint(mousePosition);
-            }
+
+            Lines[0].SampleStrokeInput(mousePosition, Time.time);
         }
         else if(Input.GetMouseButtonUp(0))
         {

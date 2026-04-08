@@ -32,4 +32,18 @@ public class LineSettings : ScriptableObject
     public float applySimplifyAfterPoints = 20.0f;
 
     public bool allowMultiTouch = true;
+
+    [Header("Procreate / hold to smooth")]
+    public bool enableHoldToSmooth = false;
+
+    public float smoothHoldSeconds = 1f;
+
+    public float stationaryWorldEpsilon = 0.005f;
+
+    [Tooltip("RDP tolerance for LineUtility.Simplify before spline resample")]
+    public float procreateSimplifyTolerance = 0.02f;
+
+    public int catmullSamplesPerSegment = 8;
+
+    public int minPointsToSmooth = 3;
 }

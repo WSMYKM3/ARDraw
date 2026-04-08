@@ -26,3 +26,9 @@ MonoBehaviour:
   tolerance: 0.001
   applySimplifyAfterPoints: 20
   allowMultiTouch: 1
+  enableHoldToSmooth: 1
+  smoothHoldSeconds: 1
+  stationaryWorldEpsilon: 0.005
+  procreateSimplifyTolerance: 0.02
+  catmullSamplesPerSegment: 8
+  minPointsToSmooth: 3
