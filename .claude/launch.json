@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Debug Log Server",
+      "runtimeExecutable": "/Library/Frameworks/Python.framework/Versions/3.14/bin/python3",
+      "runtimeArgs": ["tools/debug_log_server/debug_server.py"],
+      "port": 8080,
+      "autoPort": true
+    }
+  ]
+}

@@ -1,0 +1,830 @@
+[
+  {
+    "timestamp": "2026-04-09 15:29:34",
+    "level": "info",
+    "message": "Remote debug ping (IPhonePlayer)",
+    "received_at": "2026-04-09 15:29:34"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:43",
+    "level": "info",
+    "message": "Activate Experience",
+    "received_at": "2026-04-09 15:29:43"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:45",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:45"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:45",
+    "level": "info",
+    "message": "Anchor created & total of 1 anchor(s)",
+    "received_at": "2026-04-09 15:29:45"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:45",
+    "level": "info",
+    "message": "New line renderer created",
+    "received_at": "2026-04-09 15:29:45"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:45",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:45"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:45",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:45"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:45",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:45"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:45",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:45"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:45",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:45"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:45",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:45"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:45",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:45"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:45",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:45"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:45",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:45"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:45",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:45"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:45",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:45"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:45",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:45"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:45",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:45"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:45",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:45"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:45",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:45"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:45",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:45"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:45",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:45",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:46"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:46",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  },
+  {
+    "timestamp": "2026-04-09 15:29:47",
+    "level": "info",
+    "message": "0",
+    "received_at": "2026-04-09 15:29:47"
+  }
+]

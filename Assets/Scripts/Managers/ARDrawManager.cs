@@ -53,8 +53,9 @@ public class ARDrawManager : Singleton<ARDrawManager>
 
         for(int i = 0; i < tapCount; i++)
         {
+            if (i >= Input.touchCount) break;
             Touch touch = Input.GetTouch(i);
-            Vector3 touchPosition = arCamera.ScreenToWorldPoint(new Vector3(Input.GetTouch(i).position.x, Input.GetTouch(i).position.y, lineSettings.distanceFromCamera));
+            Vector3 touchPosition = arCamera.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, lineSettings.distanceFromCamera));
             
             ARDebugManager.Instance.LogInfo($"{touch.fingerId}");
 
@@ -124,6 +125,9 @@ public class ARDrawManager : Singleton<ARDrawManager>
         if(Input.GetMouseButton(0))
         {
             OnDraw?.Invoke();
+
+            if (Input.GetMouseButtonDown(0))
+                ARDebugManager.Instance.LogInfo("Editor draw stroke began (mouse)");
 
             if(!Lines.ContainsKey(0))
             {
