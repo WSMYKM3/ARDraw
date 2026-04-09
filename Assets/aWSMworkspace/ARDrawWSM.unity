@@ -1835,8 +1835,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blockSpawner: {fileID: 1405077188}
   buildUiAtRuntime: 1
-  topBarHeightPixels: 72
-  topBarOffsetFromTop: 36
   uiFont: {fileID: 12800000, guid: 5dd49b3eacc540408c98eee0de38e0f1, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

@@ -55,6 +55,16 @@ public class BlockSpawner : MonoBehaviour
     private Vector3 _spawnOrigin;
     private bool _hasSpawnOrigin;
 
+    /// <summary>All spawned instances are parented here; tweak local pos/rot/scale from UI to adjust the whole group.</summary>
+    public Transform SpawnedBlocksRoot { get; private set; }
+
+    void Awake()
+    {
+        var rootGo = new GameObject("SpawnedBlocksRoot");
+        rootGo.transform.SetParent(transform, false);
+        SpawnedBlocksRoot = rootGo.transform;
+    }
+
     void Start()
     {
         BuildPrefabLookup();
@@ -142,15 +152,17 @@ public class BlockSpawner : MonoBehaviour
         Vector3 p = ArrayToVector3(block.position);
         obj.transform.position = origin
             + right * (p.x * XyMetersPerNormUnit)
-            + up * (-p.y * XyMetersPerNormUnit)
+            + up * (p.y * XyMetersPerNormUnit)
             + forward * ((p.z - ZNeutral) * ForwardFromZ);
 
-        obj.transform.rotation = Quaternion.Euler(ArrayToVector3(block.rotation));
+        // Flip vertical vs device build: 180° around camera right so blocks aren’t upside down.
+        Quaternion jsonRot = Quaternion.Euler(ArrayToVector3(block.rotation));
+        obj.transform.rotation = Quaternion.AngleAxis(180f, right) * jsonRot;
 
         Vector3 scl = ArrayToVector3(block.scale);
         obj.transform.localScale = scl;
 
-        obj.transform.SetParent(transform, true);
+        obj.transform.SetParent(SpawnedBlocksRoot, true);
 
         if (isDefault)
         {
