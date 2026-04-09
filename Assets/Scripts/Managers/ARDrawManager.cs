@@ -5,6 +5,10 @@ using UnityEngine.Events;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
+/// <summary>Fires once per session with the world position of the first stroke start (touch or editor mouse).</summary>
+[System.Serializable]
+public class FirstStrokeWorldOriginEvent : UnityEvent<Vector3> { }
+
 [RequireComponent(typeof(ARAnchorManager))]
 public class ARDrawManager : Singleton<ARDrawManager>
 {
@@ -14,11 +18,20 @@ public class ARDrawManager : Singleton<ARDrawManager>
     [SerializeField]
     private UnityEvent OnDraw = null;
 
+    [Tooltip("Invoked once when the first line begins, with the world position of that stroke start.")]
+    [SerializeField]
+    private FirstStrokeWorldOriginEvent onFirstStrokeWorldOrigin = null;
+
     [SerializeField]
     private ARAnchorManager anchorManager = null;
 
     [SerializeField] 
     private Camera arCamera = null;
+
+    private bool _firstStrokeOriginInvoked;
+
+    /// <summary>True after <see cref="onFirstStrokeWorldOrigin"/> has been invoked for this session.</summary>
+    public bool HasRecordedFirstStrokeOrigin => _firstStrokeOriginInvoked;
 
     private List<ARAnchor> anchors = new List<ARAnchor>();
 
@@ -62,6 +75,12 @@ public class ARDrawManager : Singleton<ARDrawManager>
             if(touch.phase == TouchPhase.Began)
             {
                 OnDraw?.Invoke();
+
+                if (!_firstStrokeOriginInvoked)
+                {
+                    _firstStrokeOriginInvoked = true;
+                    onFirstStrokeWorldOrigin?.Invoke(touchPosition);
+                }
 
                 activeTouchFingers.Add(touch.fingerId);
                 pendingPointsWhileAnchoring[touch.fingerId] = new List<Vector3> { touchPosition };
@@ -130,7 +149,14 @@ public class ARDrawManager : Singleton<ARDrawManager>
             OnDraw?.Invoke();
 
             if (Input.GetMouseButtonDown(0))
+            {
                 ARDebugManager.Instance.LogInfo("Editor draw stroke began (mouse)");
+                if (!_firstStrokeOriginInvoked)
+                {
+                    _firstStrokeOriginInvoked = true;
+                    onFirstStrokeWorldOrigin?.Invoke(mousePosition);
+                }
+            }
 
             if(!Lines.ContainsKey(0))
             {

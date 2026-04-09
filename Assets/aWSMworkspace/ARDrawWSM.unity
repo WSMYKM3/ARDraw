@@ -820,58 +820,6 @@ LightingSettings:
   m_PVRFilteringAtrousPositionSigmaIndirect: 2
   m_PVRFilteringAtrousPositionSigmaAO: 1
   m_RespectSceneVisibilityWhenBakingGI: 0
---- !u!1 &1145975645
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1145975647}
-  - component: {fileID: 1145975646}
-  m_Layer: 0
-  m_Name: YOLOSpawner
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1145975646
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1145975645}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3bb06ffc5d3034172912f19f04a36ffc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  anchorManager: {fileID: 1405077184}
-  jsonFileName: blocks.json
-  prefabMap: []
-  defaultPrefab: {fileID: 5309824714851230198, guid: 206ec160db6ff4174874fcac7dbc9331,
-    type: 3}
-  worldScale: 5
-  scaleMultiplier: 5
-  spawnOnStart: 1
---- !u!4 &1145975647
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1145975645}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1223412310
 GameObject:
   m_ObjectHideFlags: 0
@@ -1130,6 +1078,7 @@ GameObject:
   - component: {fileID: 1405077183}
   - component: {fileID: 1405077185}
   - component: {fileID: 1405077187}
+  - component: {fileID: 1405077188}
   m_Layer: 0
   m_Name: AR Session Origin
   m_TagString: Untagged
@@ -1186,6 +1135,21 @@ MonoBehaviour:
   OnDraw:
     m_PersistentCalls:
       m_Calls: []
+  onFirstStrokeWorldOrigin:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1405077188}
+        m_TargetAssemblyTypeName: BlockSpawner, Assembly-CSharp
+        m_MethodName: OnFirstStrokeWorldOrigin
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   anchorManager: {fileID: 1405077184}
   arCamera: {fileID: 1438120338}
 --- !u!114 &1405077184
@@ -1328,6 +1292,23 @@ MonoBehaviour:
   maxLines: 20
   enableRemoteDebug: 1
   remoteServerUrl: http://192.168.0.55:8080/log
+--- !u!114 &1405077188
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1405077180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bb06ffc5d3034172912f19f04a36ffc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  jsonFileName: blocks.json
+  prefabMap: []
+  defaultPrefab: {fileID: 5309824714851230198, guid: 206ec160db6ff4174874fcac7dbc9331,
+    type: 3}
+  arCamera: {fileID: 1438120338}
 --- !u!1 &1438120337
 GameObject:
   m_ObjectHideFlags: 0
@@ -1620,6 +1601,7 @@ RectTransform:
   - {fileID: 639003841}
   - {fileID: 1223412311}
   - {fileID: 678404774}
+  - {fileID: 2100010001}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1803,6 +1785,59 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2100010000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2100010001}
+  - component: {fileID: 2100010002}
+  m_Layer: 5
+  m_Name: BlockSpawnerTuningUI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2100010001
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2100010000}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1555178248}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2100010002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2100010000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b854add7573ac42e19f7d3d6340b5b5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blockSpawner: {fileID: 1405077188}
+  buildUiAtRuntime: 1
+  topBarHeightPixels: 72
+  topBarOffsetFromTop: 36
+  uiFont: {fileID: 12800000, guid: 5dd49b3eacc540408c98eee0de38e0f1, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1816,4 +1851,3 @@ SceneRoots:
   - {fileID: 1348839849}
   - {fileID: 401796999}
   - {fileID: 2022489968}
-  - {fileID: 1145975647}

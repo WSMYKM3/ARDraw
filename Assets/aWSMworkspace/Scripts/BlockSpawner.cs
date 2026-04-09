@@ -4,21 +4,18 @@ using System.IO;
 using UnityEngine;
 
 /// <summary>
-/// Reads blocks.json produced by the MagicCamera Python pipeline
-/// and spawns prefabs (or default cubes) at the specified positions.
+/// Loads blocks.json and spawns prefabs once the first stroke provides a world anchor.
 /// </summary>
 public class BlockSpawner : MonoBehaviour
 {
-    // ── JSON data classes ───────────────────────────────────────────────────
-
     [Serializable]
     public class BlockData
     {
         public int id;
         public string type;
-        public float[] position;   // [x, y, z]  normalised
-        public float[] rotation;   // [rx, ry, rz] Euler degrees
-        public float[] scale;      // [sx, sy, sz] relative
+        public float[] position;
+        public float[] rotation;
+        public float[] scale;
         public float depth;
         public int area;
     }
@@ -29,8 +26,6 @@ public class BlockSpawner : MonoBehaviour
         public BlockData[] blocks;
     }
 
-    // ── Prefab mapping (Inspector-friendly) ─────────────────────────────────
-
     [Serializable]
     public class PrefabEntry
     {
@@ -38,75 +33,56 @@ public class BlockSpawner : MonoBehaviour
         public GameObject prefab;
     }
 
-    // ── Inspector fields ────────────────────────────────────────────────────
-
     [Header("JSON Source")]
-    [Tooltip("File name inside StreamingAssets (e.g. blocks.json)")]
     public string jsonFileName = "blocks.json";
 
     [Header("Prefab Mapping")]
-    [Tooltip("Map object type names to prefabs. Unmatched types use the default.")]
     public List<PrefabEntry> prefabMap = new List<PrefabEntry>();
-
-    [Tooltip("Fallback prefab for unmapped types. Leave empty to auto-create a cube.")]
     public GameObject defaultPrefab;
 
-    [Header("World Settings")]
-    [Tooltip("Multiplier applied to normalised positions so objects spread out in world space.")]
-    public float worldScale = 5f;
+    [Header("Layout")]
+    [Tooltip("Used for right/up/forward so JSON x,y spread in front of the user instead of at world origin.")]
+    public Camera arCamera;
 
-    [Tooltip("Multiplier applied to object scale values.")]
-    public float scaleMultiplier = 5f;
-
-    [Tooltip("Automatically spawn all blocks on Start.")]
-    public bool spawnOnStart = true;
-
-    // ── Runtime state ───────────────────────────────────────────────────────
+    // JSON positions are roughly normalised (~-1..1); fixed spread in metres (no inspector knobs).
+    const float XyMetersPerNormUnit = 1.5f;
+    const float ForwardFromZ = 0.2f;
+    const float ZNeutral = 0.55f;
 
     private readonly List<GameObject> _spawnedObjects = new List<GameObject>();
     private Dictionary<string, GameObject> _prefabLookup;
 
-    // ── Unity callbacks ─────────────────────────────────────────────────────
+    private Vector3 _spawnOrigin;
+    private bool _hasSpawnOrigin;
 
     void Start()
     {
         BuildPrefabLookup();
-
-        if (spawnOnStart)
-            SpawnAll();
     }
 
-    // ── Public API ──────────────────────────────────────────────────────────
+    /// <summary>Wire this to ARDrawManager → onFirstStrokeWorldOrigin (Vector3).</summary>
+    public void OnFirstStrokeWorldOrigin(Vector3 worldOrigin)
+    {
+        _spawnOrigin = worldOrigin;
+        _hasSpawnOrigin = true;
+        SpawnFromJsonAtOrigin(worldOrigin);
+    }
 
-    /// <summary>Load blocks.json and spawn every block.</summary>
+    public void RespawnBlocks()
+    {
+        if (!_hasSpawnOrigin)
+        {
+            Debug.LogWarning("[BlockSpawner] No first stroke yet — cannot respawn.");
+            return;
+        }
+        SpawnFromJsonAtOrigin(_spawnOrigin);
+    }
+
     public void SpawnAll()
     {
-        ClearSpawned();
-
-        string path = Path.Combine(Application.streamingAssetsPath, jsonFileName);
-
-        if (!File.Exists(path))
-        {
-            Debug.LogError($"[BlockSpawner] JSON not found: {path}");
-            return;
-        }
-
-        string json = File.ReadAllText(path);
-        BlockList data = JsonUtility.FromJson<BlockList>(json);
-
-        if (data == null || data.blocks == null || data.blocks.Length == 0)
-        {
-            Debug.LogWarning("[BlockSpawner] No blocks found in JSON.");
-            return;
-        }
-
-        Debug.Log($"[BlockSpawner] Spawning {data.blocks.Length} blocks...");
-
-        foreach (BlockData block in data.blocks)
-            SpawnBlock(block);
+        RespawnBlocks();
     }
 
-    /// <summary>Destroy all previously spawned objects.</summary>
     public void ClearSpawned()
     {
         foreach (GameObject obj in _spawnedObjects)
@@ -116,8 +92,6 @@ public class BlockSpawner : MonoBehaviour
         }
         _spawnedObjects.Clear();
     }
-
-    // ── Internal ────────────────────────────────────────────────────────────
 
     private void BuildPrefabLookup()
     {
@@ -129,38 +103,55 @@ public class BlockSpawner : MonoBehaviour
         }
     }
 
-    private void SpawnBlock(BlockData block)
+    private void SpawnFromJsonAtOrigin(Vector3 origin)
     {
-        // Resolve prefab
+        ClearSpawned();
+
+        string path = Path.Combine(Application.streamingAssetsPath, jsonFileName);
+        if (!File.Exists(path))
+        {
+            Debug.LogError($"[BlockSpawner] JSON not found: {path}");
+            return;
+        }
+
+        string json = File.ReadAllText(path);
+        BlockList data = JsonUtility.FromJson<BlockList>(json);
+        if (data?.blocks == null || data.blocks.Length == 0)
+        {
+            Debug.LogWarning("[BlockSpawner] No blocks in JSON.");
+            return;
+        }
+
+        Transform cam = arCamera != null ? arCamera.transform : transform;
+        Vector3 right = cam.right;
+        Vector3 up = cam.up;
+        Vector3 forward = cam.forward;
+
+        foreach (BlockData block in data.blocks)
+            SpawnBlock(block, origin, right, up, forward);
+    }
+
+    private void SpawnBlock(BlockData block, Vector3 origin, Vector3 right, Vector3 up, Vector3 forward)
+    {
         GameObject prefab = ResolvePrefab(block.type);
-        bool isDefault = (prefab == null);
+        bool isDefault = prefab == null;
 
-        GameObject obj;
-        if (isDefault)
-        {
-            obj = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        }
-        else
-        {
-            obj = Instantiate(prefab);
-        }
-
+        GameObject obj = isDefault ? GameObject.CreatePrimitive(PrimitiveType.Cube) : Instantiate(prefab);
         obj.name = $"Block_{block.id}_{block.type}";
 
-        // Position
-        Vector3 pos = ArrayToVector3(block.position) * worldScale;
-        obj.transform.position = pos;
+        Vector3 p = ArrayToVector3(block.position);
+        obj.transform.position = origin
+            + right * (p.x * XyMetersPerNormUnit)
+            + up * (-p.y * XyMetersPerNormUnit)
+            + forward * ((p.z - ZNeutral) * ForwardFromZ);
 
-        // Rotation
-        Vector3 rot = ArrayToVector3(block.rotation);
-        obj.transform.rotation = Quaternion.Euler(rot);
+        obj.transform.rotation = Quaternion.Euler(ArrayToVector3(block.rotation));
 
-        // Scale
-        Vector3 scl = ArrayToVector3(block.scale) * scaleMultiplier;
+        Vector3 scl = ArrayToVector3(block.scale);
         obj.transform.localScale = scl;
 
+        obj.transform.SetParent(transform, true);
 
-        // Colour default cubes by depth for quick visual feedback
         if (isDefault)
         {
             Renderer rend = obj.GetComponent<Renderer>();
@@ -172,8 +163,6 @@ public class BlockSpawner : MonoBehaviour
         }
 
         _spawnedObjects.Add(obj);
-
-        Debug.Log($"[BlockSpawner] [{block.id}] {block.type} → pos={pos} depth={block.depth:F3}");
     }
 
     private GameObject ResolvePrefab(string typeName)
