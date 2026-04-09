@@ -304,6 +304,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bb06ffc5d3034172912f19f04a36ffc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  anchorManager: {fileID: 0}
   jsonFileName: blocks.json
   prefabMap: []
   defaultPrefab: {fileID: 5309824714851230198, guid: 206ec160db6ff4174874fcac7dbc9331,

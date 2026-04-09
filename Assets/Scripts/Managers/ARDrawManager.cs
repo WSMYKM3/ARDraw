@@ -76,6 +76,9 @@ public class ARDrawManager : Singleton<ARDrawManager>
             }
             else if(touch.phase == TouchPhase.Ended)
             {
+                if (Lines.TryGetValue(touch.fingerId, out ARLine line))
+                    StrokeUploadManager.Instance.TryUploadStroke(touch.fingerId, line);
+
                 activeTouchFingers.Remove(touch.fingerId);
                 pendingPointsWhileAnchoring.Remove(touch.fingerId);
                 Lines.Remove(touch.fingerId);
@@ -140,7 +143,9 @@ public class ARDrawManager : Singleton<ARDrawManager>
         }
         else if(Input.GetMouseButtonUp(0))
         {
-            Lines.Remove(0);   
+            if (Lines.TryGetValue(0, out ARLine line))
+                StrokeUploadManager.Instance.TryUploadStroke(0, line);
+            Lines.Remove(0);
         }
     }
 

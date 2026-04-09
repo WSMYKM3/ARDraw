@@ -166,4 +166,25 @@ public class ARLine
 
         ARDebugManager.Instance.LogInfo($"New line renderer created");
     }
+
+    /// <summary>True if hold-to-smooth ran at least once this stroke.</summary>
+    public bool WasSmoothed => smoothedThisStroke;
+
+    /// <summary>Copies final world-space vertices from the LineRenderer (includes smoothing if applied).</summary>
+    public bool TryCopyWorldPositions(List<Vector3> dest)
+    {
+        dest.Clear();
+        if (LineRenderer == null)
+            return false;
+
+        int n = LineRenderer.positionCount;
+        if (n < 1)
+            return false;
+
+        var arr = new Vector3[n];
+        LineRenderer.GetPositions(arr);
+        for (int i = 0; i < n; i++)
+            dest.Add(arr[i]);
+        return true;
+    }
 }

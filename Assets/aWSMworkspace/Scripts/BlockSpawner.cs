@@ -159,8 +159,6 @@ public class BlockSpawner : MonoBehaviour
         Vector3 scl = ArrayToVector3(block.scale) * scaleMultiplier;
         obj.transform.localScale = scl;
 
-        // Parent under this object for tidiness
-        obj.transform.SetParent(transform, true);
 
         // Colour default cubes by depth for quick visual feedback
         if (isDefault)
