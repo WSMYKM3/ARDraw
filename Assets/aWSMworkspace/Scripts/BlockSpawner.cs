@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using TMPro;
 using UnityEngine;
 
 /// <summary>
@@ -43,6 +44,16 @@ public class BlockSpawner : MonoBehaviour
     [Header("Layout")]
     [Tooltip("Used for right/up/forward so JSON x,y spread in front of the user instead of at world origin.")]
     public Camera arCamera;
+
+    [Header("Block type label (world text above each spawn)")]
+    [Tooltip("If empty, loads TextMesh Pro default: Resources/Fonts & Materials/LiberationSans SDF")]
+    public TMP_FontAsset blockIdFont;
+
+    [Tooltip("Extra metres above the block bounds along world up.")]
+    public float blockIdOffsetAboveBounds = 0.08f;
+
+    [Tooltip("World-space text size (TMP font size).")]
+    public float blockIdFontSize = 3f;
 
     // JSON positions are roughly normalised (~-1..1); fixed spread in metres (no inspector knobs).
     const float XyMetersPerNormUnit = 1.5f;
@@ -174,7 +185,66 @@ public class BlockSpawner : MonoBehaviour
             }
         }
 
+        AttachBlockTypeLabel(obj, block);
+
         _spawnedObjects.Add(obj);
+    }
+
+    void AttachBlockTypeLabel(GameObject blockRoot, BlockData block)
+    {
+        Camera cam = arCamera != null ? arCamera : Camera.main;
+
+        string display = string.IsNullOrEmpty(block.type) ? block.id.ToString() : block.type;
+
+        float liftWorld = 0.15f;
+        Bounds b = new Bounds(blockRoot.transform.position, Vector3.zero);
+        bool hasBounds = false;
+        foreach (Renderer r in blockRoot.GetComponentsInChildren<Renderer>())
+        {
+            if (!hasBounds)
+            {
+                b = r.bounds;
+                hasBounds = true;
+            }
+            else
+                b.Encapsulate(r.bounds);
+        }
+
+        if (hasBounds)
+            liftWorld = b.extents.y + blockIdOffsetAboveBounds;
+        else
+            liftWorld = blockIdOffsetAboveBounds + 0.1f;
+
+        Vector3 pos = blockRoot.transform.position + Vector3.up * liftWorld;
+
+        var labelGo = new GameObject($"Label_{display.Replace('/', '_')}");
+        labelGo.transform.SetParent(blockRoot.transform, true);
+        labelGo.transform.position = pos;
+
+        var tmp = labelGo.AddComponent<TextMeshPro>();
+        tmp.text = display;
+        tmp.fontSize = blockIdFontSize;
+        tmp.alignment = TextAlignmentOptions.Center;
+        tmp.enableWordWrapping = false;
+        tmp.overflowMode = TextOverflowModes.Overflow;
+        tmp.color = Color.white;
+
+        TMP_FontAsset font = blockIdFont;
+        if (font == null)
+            font = Resources.Load<TMP_FontAsset>("Fonts & Materials/LiberationSans SDF");
+        if (font != null)
+            tmp.font = font;
+
+        var billboard = labelGo.AddComponent<BlockIdBillboard>();
+        billboard.TargetCamera = cam;
+
+        // Face camera once in case LateUpdate runs next frame
+        if (cam != null)
+        {
+            Vector3 toCam = cam.transform.position - labelGo.transform.position;
+            if (toCam.sqrMagnitude > 1e-6f)
+                labelGo.transform.rotation = Quaternion.LookRotation(toCam, Vector3.up) * Quaternion.Euler(0f, 180f, 0f);
+        }
     }
 
     private GameObject ResolvePrefab(string typeName)

@@ -1,9 +1,10 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// Regenerate bar + one slider for uniform scale on SpawnedBlocksRoot.
+/// Left: vertical scale slider. Right: Draw toggle.
 /// </summary>
 [DisallowMultipleComponent]
 public class BlockSpawnerTuningUI : MonoBehaviour
@@ -15,14 +16,27 @@ public class BlockSpawnerTuningUI : MonoBehaviour
 
     public Font uiFont;
 
+    [Header("Scale slider")]
+    [Tooltip("Initial uniform scale for SpawnedBlocksRoot when the UI builds (also the slider’s starting value).")]
+    [Range(0.05f, 4f)]
+    public float defaultGroupScale = 0.3f;
+
     private Font _resolvedFont;
     private Slider _scale;
+    private Image _drawButtonImage;
 
-    const float TopBarHeightPx = 72f;
-    const float TopBarOffsetPx = 36f;
-    const float BottomPanelHeightFraction = 0.32f;
+    static readonly Color DrawEnabledGreen = new Color(0.18f, 0.62f, 0.32f, 1f);
+    static readonly Color DrawDisabledGrey = new Color(0.42f, 0.43f, 0.45f, 1f);
+
     const float ScaleMin = 0.05f;
     const float ScaleMax = 4f;
+
+    const float LeftStripWidthPx = 112f;
+    const float RightDrawWidthPx = 88f;
+    const float EdgeInsetPx = 12f;
+    /// <summary>Vertical span for left/right strips (0–1), avoids overlap with bottom UI.</summary>
+    const float StripAnchorYMin = 0.1f;
+    const float StripAnchorYMax = 0.82f;
 
     void Start()
     {
@@ -37,6 +51,14 @@ public class BlockSpawnerTuningUI : MonoBehaviour
 
         if (buildUiAtRuntime)
             BuildUi();
+
+        StartCoroutine(CoSyncDrawButtonAfterFrame());
+    }
+
+    IEnumerator CoSyncDrawButtonAfterFrame()
+    {
+        yield return null;
+        UpdateDrawButtonVisual();
     }
 
     public void BuildUi()
@@ -52,108 +74,67 @@ public class BlockSpawnerTuningUI : MonoBehaviour
         for (int i = transform.childCount - 1; i >= 0; i--)
             Destroy(transform.GetChild(i).gameObject);
 
-        BuildBottomScalePanel();
-        BuildTopRegenerateBar();
+        BuildLeftVerticalScale();
+        BuildDrawButtonRight();
     }
 
-    void BuildTopRegenerateBar()
+    void BuildDrawButtonRight()
     {
-        var bar = new GameObject("TopRegenerateBar", typeof(RectTransform), typeof(Image));
-        bar.transform.SetParent(transform, false);
-        var barRt = bar.GetComponent<RectTransform>();
-        barRt.anchorMin = new Vector2(0f, 1f);
-        barRt.anchorMax = new Vector2(1f, 1f);
-        barRt.pivot = new Vector2(0.5f, 1f);
-        barRt.anchoredPosition = new Vector2(0f, -TopBarOffsetPx);
-        barRt.sizeDelta = new Vector2(0f, TopBarHeightPx);
+        var drawGo = new GameObject("DrawButton", typeof(RectTransform), typeof(Image), typeof(Button));
+        drawGo.transform.SetParent(transform, false);
+        var btnRt = drawGo.GetComponent<RectTransform>();
+        btnRt.anchorMin = new Vector2(1f, StripAnchorYMin);
+        btnRt.anchorMax = new Vector2(1f, StripAnchorYMax);
+        btnRt.pivot = new Vector2(1f, 0.5f);
+        btnRt.anchoredPosition = new Vector2(-EdgeInsetPx, 0f);
+        btnRt.sizeDelta = new Vector2(RightDrawWidthPx, 0f);
 
-        var barImg = bar.GetComponent<Image>();
-        barImg.color = new Color(0.05f, 0.06f, 0.1f, 0.96f);
-        barImg.raycastTarget = true;
+        var drawImg = drawGo.GetComponent<Image>();
+        _drawButtonImage = drawImg;
+        drawImg.raycastTarget = true;
+        var drawBtn = drawGo.GetComponent<Button>();
+        drawBtn.targetGraphic = drawImg;
+        AddButtonText(drawGo.transform, "Draw");
+        drawBtn.onClick.AddListener(ToggleDraw);
 
-        var btnGo = new GameObject("RegenerateButton", typeof(RectTransform), typeof(Image), typeof(Button));
-        btnGo.transform.SetParent(bar.transform, false);
-        var btnRt = btnGo.GetComponent<RectTransform>();
-        btnRt.anchorMin = new Vector2(0f, 0f);
-        btnRt.anchorMax = new Vector2(1f, 1f);
-        btnRt.offsetMin = new Vector2(16f, 10f);
-        btnRt.offsetMax = new Vector2(-16f, -10f);
-
-        var btnImg = btnGo.GetComponent<Image>();
-        btnImg.color = new Color(0.15f, 0.48f, 0.95f, 1f);
-        btnImg.raycastTarget = true;
-        var btn = btnGo.GetComponent<Button>();
-        btn.targetGraphic = btnImg;
-
-        var txtGo = new GameObject("Text", typeof(RectTransform));
-        txtGo.transform.SetParent(btnGo.transform, false);
-        var txt = txtGo.AddComponent<Text>();
-        txt.font = _resolvedFont;
-        txt.fontSize = 24;
-        txt.fontStyle = FontStyle.Bold;
-        txt.color = Color.white;
-        txt.alignment = TextAnchor.MiddleCenter;
-        txt.text = "regenerate";
-        txt.horizontalOverflow = HorizontalWrapMode.Overflow;
-        txt.verticalOverflow = VerticalWrapMode.Overflow;
-        txt.raycastTarget = false;
-        var trt = txtGo.GetComponent<RectTransform>();
-        trt.anchorMin = Vector2.zero;
-        trt.anchorMax = Vector2.one;
-        trt.offsetMin = Vector2.zero;
-        trt.offsetMax = Vector2.zero;
-
-        btn.onClick.AddListener(() =>
-        {
-            if (blockSpawner != null)
-                blockSpawner.RespawnBlocks();
-        });
+        UpdateDrawButtonVisual();
     }
 
-    void BuildBottomScalePanel()
+    void BuildLeftVerticalScale()
     {
-        var panel = new GameObject("ScalePanel", typeof(RectTransform), typeof(Image));
-        panel.transform.SetParent(transform, false);
-        var panelRt = panel.GetComponent<RectTransform>();
-        panelRt.anchorMin = new Vector2(0f, 0f);
-        panelRt.anchorMax = new Vector2(1f, BottomPanelHeightFraction);
-        panelRt.offsetMin = Vector2.zero;
-        panelRt.offsetMax = Vector2.zero;
+        var column = new GameObject("ScaleColumn", typeof(RectTransform));
+        column.transform.SetParent(transform, false);
+        var colRt = column.GetComponent<RectTransform>();
+        colRt.anchorMin = new Vector2(0f, StripAnchorYMin);
+        colRt.anchorMax = new Vector2(0f, StripAnchorYMax);
+        colRt.pivot = new Vector2(0f, 0.5f);
+        colRt.anchoredPosition = new Vector2(EdgeInsetPx, 0f);
+        colRt.sizeDelta = new Vector2(LeftStripWidthPx, 0f);
 
-        panel.GetComponent<Image>().color = new Color(0.04f, 0.05f, 0.08f, 0.94f);
-        panel.GetComponent<Image>().raycastTarget = true;
-
-        var content = new GameObject("Content", typeof(RectTransform), typeof(VerticalLayoutGroup));
-        content.transform.SetParent(panel.transform, false);
-        var contentRt = content.GetComponent<RectTransform>();
-        contentRt.anchorMin = Vector2.zero;
-        contentRt.anchorMax = Vector2.one;
-        contentRt.offsetMin = new Vector2(16f, 14f);
-        contentRt.offsetMax = new Vector2(-16f, -14f);
-
-        var vlg = content.GetComponent<VerticalLayoutGroup>();
-        vlg.padding = new RectOffset(6, 6, 6, 6);
-        vlg.spacing = 10f;
+        var vlg = column.AddComponent<VerticalLayoutGroup>();
+        vlg.padding = new RectOffset(4, 4, 4, 4);
+        vlg.spacing = 8f;
         vlg.childAlignment = TextAnchor.UpperCenter;
         vlg.childControlWidth = true;
         vlg.childForceExpandWidth = true;
         vlg.childControlHeight = true;
-        vlg.childForceExpandHeight = false;
+        vlg.childForceExpandHeight = true;
 
         var title = new GameObject("Title", typeof(RectTransform), typeof(LayoutElement));
-        title.transform.SetParent(content.transform, false);
-        title.GetComponent<LayoutElement>().minHeight = 26f;
+        title.transform.SetParent(column.transform, false);
+        title.GetComponent<LayoutElement>().minHeight = 22f;
         var tt = title.AddComponent<Text>();
         tt.font = _resolvedFont;
-        tt.fontSize = 20;
+        tt.fontSize = 16;
         tt.fontStyle = FontStyle.Bold;
-        tt.color = new Color(0.85f, 0.88f, 0.95f);
-        tt.text = "Scale (group)";
-        tt.alignment = TextAnchor.MiddleLeft;
+        tt.color = new Color(0.9f, 0.92f, 0.96f);
+        tt.text = "Scale";
+        tt.alignment = TextAnchor.MiddleCenter;
 
-        _scale = AddSliderRow(content.transform, "×", ScaleMin, ScaleMax, 1f, _ => ApplyScale());
+        float startScale = Mathf.Clamp(defaultGroupScale, ScaleMin, ScaleMax);
+        _scale = AddVerticalScaleSlider(column.transform, startScale, _ => ApplyScale());
 
-        SyncScaleFromRoot();
+        ApplyScale();
     }
 
     void ApplyScale()
@@ -165,83 +146,50 @@ public class BlockSpawnerTuningUI : MonoBehaviour
         blockSpawner.SpawnedBlocksRoot.localScale = new Vector3(u, u, u);
     }
 
-    void SyncScaleFromRoot()
+    /// <summary>Vertical slider (BottomToTop), no extra panel — column has no Image.</summary>
+    Slider AddVerticalScaleSlider(Transform parent, float start, Action<float> onChanged)
     {
-        if (blockSpawner == null || blockSpawner.SpawnedBlocksRoot == null || _scale == null)
-            return;
-
-        Vector3 s = blockSpawner.SpawnedBlocksRoot.localScale;
-        float u = (s.x + s.y + s.z) / 3f;
-        if (u < ScaleMin) u = ScaleMin;
-        if (u > ScaleMax) u = ScaleMax;
-        _scale.SetValueWithoutNotify(u);
-    }
-
-    Slider AddSliderRow(Transform parent, string label, float min, float max, float start, Action<float> onChanged)
-    {
-        var row = new GameObject("Row_Scale", typeof(RectTransform), typeof(HorizontalLayoutGroup), typeof(LayoutElement));
-        row.transform.SetParent(parent, false);
-        row.GetComponent<LayoutElement>().minHeight = 64f;
-        row.GetComponent<LayoutElement>().preferredHeight = 64f;
-
-        var hl = row.GetComponent<HorizontalLayoutGroup>();
-        hl.spacing = 12f;
-        hl.childAlignment = TextAnchor.MiddleLeft;
-        hl.childControlWidth = true;
-        hl.childForceExpandWidth = false;
-        hl.childControlHeight = true;
-        hl.childForceExpandHeight = false;
-
-        var labGo = new GameObject("Lab", typeof(RectTransform), typeof(LayoutElement));
-        labGo.transform.SetParent(row.transform, false);
-        labGo.GetComponent<LayoutElement>().minWidth = 36f;
-        labGo.GetComponent<LayoutElement>().preferredWidth = 36f;
-        var lab = labGo.AddComponent<Text>();
-        lab.font = _resolvedFont;
-        lab.fontSize = 20;
-        lab.color = Color.white;
-        lab.text = label;
-        lab.alignment = TextAnchor.MiddleLeft;
-
-        var valGo = new GameObject("Val", typeof(RectTransform), typeof(LayoutElement));
-        valGo.transform.SetParent(row.transform, false);
-        valGo.GetComponent<LayoutElement>().minWidth = 64f;
-        valGo.GetComponent<LayoutElement>().preferredWidth = 64f;
-        var valText = valGo.AddComponent<Text>();
+        var valueGo = new GameObject("ScaleValue", typeof(RectTransform), typeof(LayoutElement));
+        valueGo.transform.SetParent(parent, false);
+        valueGo.GetComponent<LayoutElement>().minHeight = 22f;
+        var valText = valueGo.AddComponent<Text>();
         valText.font = _resolvedFont;
-        valText.fontSize = 18;
-        valText.color = new Color(0.7f, 0.9f, 1f);
-        valText.alignment = TextAnchor.MiddleRight;
+        valText.fontSize = 17;
+        valText.color = new Color(0.75f, 0.92f, 1f);
+        valText.alignment = TextAnchor.MiddleCenter;
 
         var sliderGo = new GameObject("Slider", typeof(RectTransform), typeof(Slider), typeof(LayoutElement));
-        sliderGo.transform.SetParent(row.transform, false);
+        sliderGo.transform.SetParent(parent, false);
         var sliderLe = sliderGo.GetComponent<LayoutElement>();
-        sliderLe.minWidth = 160f;
-        sliderLe.minHeight = 56f;
-        sliderLe.preferredHeight = 56f;
-        sliderLe.flexibleWidth = 1f;
+        sliderLe.minWidth = 56f;
+        sliderLe.flexibleHeight = 1f;
 
         var sl = sliderGo.GetComponent<Slider>();
-        sl.minValue = min;
-        sl.maxValue = max;
+        sl.minValue = ScaleMin;
+        sl.maxValue = ScaleMax;
         sl.wholeNumbers = false;
         sl.value = start;
-        sl.direction = Slider.Direction.LeftToRight;
+        sl.direction = Slider.Direction.BottomToTop;
 
         var bg = new GameObject("Background", typeof(RectTransform), typeof(Image));
         bg.transform.SetParent(sliderGo.transform, false);
         var bgRt = bg.GetComponent<RectTransform>();
-        bgRt.anchorMin = new Vector2(0f, 0.12f);
-        bgRt.anchorMax = new Vector2(1f, 0.88f);
+        bgRt.anchorMin = new Vector2(0.5f, 0f);
+        bgRt.anchorMax = new Vector2(0.5f, 1f);
+        bgRt.pivot = new Vector2(0.5f, 0.5f);
+        bgRt.sizeDelta = new Vector2(22f, 0f);
         bgRt.offsetMin = Vector2.zero;
         bgRt.offsetMax = Vector2.zero;
-        bg.GetComponent<Image>().color = new Color(0.15f, 0.16f, 0.2f);
+        // Thin track only (no panel); keep slight alpha so the slider receives raycasts.
+        bg.GetComponent<Image>().color = new Color(0.35f, 0.36f, 0.4f, 0.35f);
 
         var fill = new GameObject("Fill Area", typeof(RectTransform));
         fill.transform.SetParent(sliderGo.transform, false);
         var fillArea = fill.GetComponent<RectTransform>();
-        fillArea.anchorMin = new Vector2(0f, 0.12f);
-        fillArea.anchorMax = new Vector2(1f, 0.88f);
+        fillArea.anchorMin = new Vector2(0.5f, 0f);
+        fillArea.anchorMax = new Vector2(0.5f, 1f);
+        fillArea.pivot = new Vector2(0.5f, 0.5f);
+        fillArea.sizeDelta = new Vector2(22f, 0f);
         fillArea.offsetMin = Vector2.zero;
         fillArea.offsetMax = Vector2.zero;
 
@@ -249,12 +197,12 @@ public class BlockSpawnerTuningUI : MonoBehaviour
         fillImg.transform.SetParent(fill.transform, false);
         var fillRt = fillImg.GetComponent<RectTransform>();
         fillRt.anchorMin = new Vector2(0f, 0f);
-        fillRt.anchorMax = new Vector2(0f, 1f);
-        fillRt.pivot = new Vector2(0f, 0.5f);
+        fillRt.anchorMax = new Vector2(1f, 0f);
+        fillRt.pivot = new Vector2(0.5f, 0f);
         fillRt.offsetMin = Vector2.zero;
         fillRt.offsetMax = Vector2.zero;
         fillRt.sizeDelta = Vector2.zero;
-        fillImg.GetComponent<Image>().color = new Color(0.2f, 0.55f, 0.95f);
+        fillImg.GetComponent<Image>().color = new Color(0.2f, 0.55f, 0.95f, 1f);
 
         var handle = new GameObject("Handle Slide Area", typeof(RectTransform));
         handle.transform.SetParent(sliderGo.transform, false);
@@ -268,9 +216,9 @@ public class BlockSpawnerTuningUI : MonoBehaviour
         handleKnob.transform.SetParent(handle.transform, false);
         var hkRt = handleKnob.GetComponent<RectTransform>();
         hkRt.anchorMin = new Vector2(0f, 0f);
-        hkRt.anchorMax = new Vector2(0f, 1f);
+        hkRt.anchorMax = new Vector2(1f, 0f);
         hkRt.pivot = new Vector2(0.5f, 0.5f);
-        hkRt.sizeDelta = new Vector2(36f, 0f);
+        hkRt.sizeDelta = new Vector2(0f, 28f);
         handleKnob.GetComponent<Image>().color = Color.white;
 
         sl.fillRect = fillRt;
@@ -287,5 +235,49 @@ public class BlockSpawnerTuningUI : MonoBehaviour
         UpdateVal(sl.value);
 
         return sl;
+    }
+
+    void AddButtonText(Transform parent, string caption)
+    {
+        var txtGo = new GameObject("Text", typeof(RectTransform));
+        txtGo.transform.SetParent(parent, false);
+        var txt = txtGo.AddComponent<Text>();
+        txt.font = _resolvedFont;
+        txt.fontSize = 24;
+        txt.fontStyle = FontStyle.Bold;
+        txt.color = Color.white;
+        txt.alignment = TextAnchor.MiddleCenter;
+        txt.text = caption;
+        txt.horizontalOverflow = HorizontalWrapMode.Overflow;
+        txt.verticalOverflow = VerticalWrapMode.Overflow;
+        txt.raycastTarget = false;
+        var trt = txtGo.GetComponent<RectTransform>();
+        trt.anchorMin = Vector2.zero;
+        trt.anchorMax = Vector2.one;
+        trt.offsetMin = Vector2.zero;
+        trt.offsetMax = Vector2.zero;
+    }
+
+    void ToggleDraw()
+    {
+        var m = ARDrawManager.Instance;
+        if (m == null)
+        {
+            Debug.LogWarning("[BlockSpawnerTuningUI] ARDrawManager not found.");
+            return;
+        }
+
+        m.AllowDraw(!m.IsDrawAllowed);
+        UpdateDrawButtonVisual();
+    }
+
+    void UpdateDrawButtonVisual()
+    {
+        if (_drawButtonImage == null)
+            return;
+
+        var m = ARDrawManager.Instance;
+        bool on = m != null && m.IsDrawAllowed;
+        _drawButtonImage.color = on ? DrawEnabledGreen : DrawDisabledGrey;
     }
 }

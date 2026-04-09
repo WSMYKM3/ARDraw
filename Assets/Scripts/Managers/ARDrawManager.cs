@@ -43,6 +43,9 @@ public class ARDrawManager : Singleton<ARDrawManager>
 
     private bool CanDraw { get; set; }
 
+    /// <summary>Whether line drawing is currently allowed (see <see cref="AllowDraw"/>).</summary>
+    public bool IsDrawAllowed => CanDraw;
+
     void Update ()
     {
         #if !UNITY_EDITOR    
