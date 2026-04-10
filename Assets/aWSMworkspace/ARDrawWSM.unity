@@ -1047,7 +1047,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enableStrokeUpload: 1
-  strokeServerUrl: http://192.168.0.55:8081/stroke
+  strokeServerUrl: http://172.20.10.2:8081/stroke
 --- !u!4 &1348839849
 Transform:
   m_ObjectHideFlags: 0

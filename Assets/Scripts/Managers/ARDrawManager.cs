@@ -30,6 +30,12 @@ public class ARDrawManager : Singleton<ARDrawManager>
 
     private bool _firstStrokeOriginInvoked;
 
+    /// <summary>Finger that began the spawn-anchor stroke; used to skip one stroke upload to stroke_server.</summary>
+    private int _spawnStrokeFingerId;
+
+    /// <summary>True until the spawn-anchor stroke ends (upload for that stroke is skipped).</summary>
+    private bool _pendingSkipFirstStrokeUpload;
+
     /// <summary>True after <see cref="onFirstStrokeWorldOrigin"/> has been invoked for this session.</summary>
     public bool HasRecordedFirstStrokeOrigin => _firstStrokeOriginInvoked;
 
@@ -82,6 +88,8 @@ public class ARDrawManager : Singleton<ARDrawManager>
                 if (!_firstStrokeOriginInvoked)
                 {
                     _firstStrokeOriginInvoked = true;
+                    _spawnStrokeFingerId = touch.fingerId;
+                    _pendingSkipFirstStrokeUpload = true;
                     onFirstStrokeWorldOrigin?.Invoke(touchPosition);
                 }
 
@@ -99,7 +107,17 @@ public class ARDrawManager : Singleton<ARDrawManager>
             else if(touch.phase == TouchPhase.Ended)
             {
                 if (Lines.TryGetValue(touch.fingerId, out ARLine line))
-                    StrokeUploadManager.Instance.TryUploadStroke(touch.fingerId, line);
+                {
+                    if (_pendingSkipFirstStrokeUpload && touch.fingerId == _spawnStrokeFingerId)
+                        _pendingSkipFirstStrokeUpload = false;
+                    else
+                        StrokeUploadManager.Instance.TryUploadStroke(touch.fingerId, line);
+                }
+                else if (_pendingSkipFirstStrokeUpload && touch.fingerId == _spawnStrokeFingerId)
+                {
+                    // e.g. anchor failed — no line; do not leave skip pending for the next stroke.
+                    _pendingSkipFirstStrokeUpload = false;
+                }
 
                 activeTouchFingers.Remove(touch.fingerId);
                 pendingPointsWhileAnchoring.Remove(touch.fingerId);
@@ -157,6 +175,8 @@ public class ARDrawManager : Singleton<ARDrawManager>
                 if (!_firstStrokeOriginInvoked)
                 {
                     _firstStrokeOriginInvoked = true;
+                    _spawnStrokeFingerId = 0;
+                    _pendingSkipFirstStrokeUpload = true;
                     onFirstStrokeWorldOrigin?.Invoke(mousePosition);
                 }
             }
@@ -173,7 +193,12 @@ public class ARDrawManager : Singleton<ARDrawManager>
         else if(Input.GetMouseButtonUp(0))
         {
             if (Lines.TryGetValue(0, out ARLine line))
-                StrokeUploadManager.Instance.TryUploadStroke(0, line);
+            {
+                if (_pendingSkipFirstStrokeUpload && 0 == _spawnStrokeFingerId)
+                    _pendingSkipFirstStrokeUpload = false;
+                else
+                    StrokeUploadManager.Instance.TryUploadStroke(0, line);
+            }
             Lines.Remove(0);
         }
     }
